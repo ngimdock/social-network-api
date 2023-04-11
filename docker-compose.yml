@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   postgres:
-    image: postgres:13
+    image: postgres:14
     hostname: postgres
     container_name: neko-social-postgres
     restart: always
