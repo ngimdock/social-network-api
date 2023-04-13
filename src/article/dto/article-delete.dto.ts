@@ -1,6 +1,7 @@
-import { Field, ID } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-export class ArticleDeleteDto {
+@ObjectType()
+export class ArticleDeleteOutput {
   @Field(() => ID)
   id: string;
 }

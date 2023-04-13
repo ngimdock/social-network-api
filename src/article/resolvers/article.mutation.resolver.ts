@@ -4,8 +4,10 @@ import {
   ArticleCreateInput,
   ArticleCreateOutput,
   ArticleUpdateInput,
+  ArticleUpdateOutput,
 } from '../dto';
 import { Article } from '../models';
+import { ArticleDeleteOutput } from '../dto/article-delete.dto';
 
 @Resolver(Article)
 export class ArticleMutationResolver {
@@ -18,7 +20,7 @@ export class ArticleMutationResolver {
     return this.articleService.createArticle(input);
   }
 
-  @Mutation(() => ArticleCreateOutput)
+  @Mutation(() => ArticleUpdateOutput)
   async articleUpdate(
     @Args({ name: 'articleId', type: () => ID }) id: Article['id'],
     @Args('updateInput') updateInput: ArticleUpdateInput,
@@ -26,7 +28,7 @@ export class ArticleMutationResolver {
     return this.articleService.updateArticle(id, updateInput);
   }
 
-  @Mutation(() => ArticleCreateOutput)
+  @Mutation(() => ArticleDeleteOutput)
   async articleDelete(
     @Args({ name: 'articleId', type: () => ID }) id: Article['id'],
   ) {
