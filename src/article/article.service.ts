@@ -48,6 +48,10 @@ export class ArticleService {
     return { article: articleToDelete };
   }
 
+  async articleList(): Promise<Article[]> {
+    return this.articleRepository.find();
+  }
+
   async findOne(id: string): Promise<Article> {
     const foundArticle = await this.articleRepository.findOne(id);
 

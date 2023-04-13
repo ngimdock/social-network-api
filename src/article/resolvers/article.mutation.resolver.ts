@@ -11,8 +11,6 @@ import { ArticleDeleteOutput } from '../dto/article-delete.dto';
 
 @Resolver(Article)
 export class ArticleMutationResolver {
-  getArticleId = { name: 'articleId', type: () => ID };
-
   constructor(private readonly articleService: ArticleService) {}
 
   @Mutation(() => ArticleCreateOutput)
