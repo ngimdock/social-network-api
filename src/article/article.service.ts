@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import {
   ArticleCreateInput,
   ArticleCreateOutput,
+  ArticlePagination,
+  ArticlePaginationArgs,
   ArticleUpdateInput,
   ArticleUpdateOutput,
 } from './dto';
@@ -9,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './models';
 import { Repository } from 'typeorm';
 import { ArticleNotFoundException } from './exceptions';
+import { SortDirection } from 'src/pagination/dto';
 
 @Injectable()
 export class ArticleService {
@@ -48,8 +51,20 @@ export class ArticleService {
     return { article: articleToDelete };
   }
 
-  async articleList(): Promise<Article[]> {
-    return this.articleRepository.find();
+  async articlesPaginated(
+    args: ArticlePaginationArgs,
+  ): Promise<ArticlePagination> {
+    const [nodes, totalCount] = await this.articleRepository.findAndCount({
+      skip: args.skip,
+      take: args.take,
+      order: {
+        createdAd:
+          args.sortBy?.createdAt === SortDirection.ASC ? 'ASC' : 'DESC',
+        title: args.sortBy?.title === SortDirection.ASC ? 'ASC' : 'DESC',
+      },
+    });
+
+    return { nodes, totalCount };
   }
 
   async findOne(id: string): Promise<Article> {

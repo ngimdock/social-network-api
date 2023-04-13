@@ -3,11 +3,11 @@ import { ArticleService } from '../article.service';
 import {
   ArticleCreateInput,
   ArticleCreateOutput,
+  ArticleDeleteOutput,
   ArticleUpdateInput,
   ArticleUpdateOutput,
 } from '../dto';
 import { Article } from '../models';
-import { ArticleDeleteOutput } from '../dto/article-delete.dto';
 
 @Resolver(Article)
 export class ArticleMutationResolver {
