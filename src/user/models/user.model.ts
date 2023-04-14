@@ -10,7 +10,10 @@ export class User extends Node {
   email: string;
 
   @Column()
-  password: string;
+  hash: string;
+
+  @Column({ nullable: true })
+  rtHash?: string;
 
   @Field(() => String)
   @Column()

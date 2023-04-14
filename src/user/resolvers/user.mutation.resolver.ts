@@ -7,10 +7,10 @@ import { UserCreateInput, UserCreateOutput } from '../dto';
 export class UserMutationResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Mutation(() => UserCreateOutput)
-  async userCreate(
-    @Args('input') input: UserCreateInput,
-  ): Promise<UserCreateOutput> {
-    return this.userService.userCreate(input);
-  }
+  // @Mutation(() => UserCreateOutput)
+  // async userCreate(
+  //   @Args('input') input: UserCreateInput,
+  // ): Promise<UserCreateOutput> {
+  //   return this.userService.userCreate(input);
+  // }
 }

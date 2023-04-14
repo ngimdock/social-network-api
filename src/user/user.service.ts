@@ -2,8 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './models';
-import { CredentialsIncorrectException } from './exceptions';
-import { UserCreateInput, UserCreateOutput } from './dto';
+import {
+  CredentialsIncorrectException,
+  UserNotFoudException,
+} from './exceptions';
+import { UserCreateOutput } from './dto';
+import { UserCreateData } from './types';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UserService {
@@ -11,7 +16,7 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async userCreate(input: UserCreateInput): Promise<UserCreateOutput> {
+  async userCreate(input: UserCreateData): Promise<UserCreateOutput> {
     const foudUser = await this.userGetByEmail(input.email);
 
     if (foudUser) throw new CredentialsIncorrectException();
@@ -25,5 +30,23 @@ export class UserService {
 
   async userGetByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({ email });
+  }
+
+  async userGetById(userId: string): Promise<User> {
+    const foundUser = this.userRepository.findOne({ id: userId });
+
+    if (!foundUser) throw new UserNotFoudException();
+
+    return foundUser;
+  }
+
+  async userUpdateRtHash(userId: string, newRtHash: string) {
+    const user = await this.userGetById(userId);
+
+    const rtHash = await argon2.hash(newRtHash);
+
+    user.rtHash = rtHash;
+
+    await user.save();
   }
 }

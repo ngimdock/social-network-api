@@ -16,7 +16,7 @@ export class UserCreateInput {
   lastName: string;
 
   @Field(() => String, { nullable: true })
-  avatar: string;
+  avatar?: string;
 }
 
 @ObjectType()

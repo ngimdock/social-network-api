@@ -8,8 +8,11 @@ import { AppController } from './app.controller';
 import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { ArticleModule } from './article/article.module';
-import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtGuard } from './auth/guards';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,7 +22,11 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: 'schema.gql',
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+      ],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
@@ -32,11 +39,17 @@ import { UserModule } from './user/user.module';
         synchronize: true,
       }),
     }),
-    ArticleModule,
+    JwtModule.register({ global: true }),
     AuthModule,
+    ArticleModule,
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AppResolver],
+
+  providers: [
+    AppService,
+    AppResolver,
+    { provide: APP_GUARD, useClass: JwtGuard },
+  ],
 })
 export class AppModule {}
