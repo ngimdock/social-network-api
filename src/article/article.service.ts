@@ -11,7 +11,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './models';
 import { Repository } from 'typeorm';
 import { ArticleNotFoundException } from './exceptions';
-import { SortDirection } from 'src/pagination/dto';
 
 @Injectable()
 export class ArticleService {
@@ -54,15 +53,18 @@ export class ArticleService {
   async articlesPaginated(
     args: ArticlePaginationArgs,
   ): Promise<ArticlePagination> {
-    const [nodes, totalCount] = await this.articleRepository.findAndCount({
-      skip: args.skip,
-      take: args.take,
-      order: {
-        createdAd:
-          args.sortBy?.createdAt === SortDirection.ASC ? 'ASC' : 'DESC',
-        title: args.sortBy?.title === SortDirection.ASC ? 'ASC' : 'DESC',
-      },
-    });
+    const { skip, take, sortBy } = args;
+
+    const qb = this.articleRepository.createQueryBuilder('article');
+    qb.skip(skip).take(take);
+
+    if (args.sortBy) {
+      if (sortBy.title) qb.addOrderBy('article.title', sortBy.title);
+      if (sortBy.createdAt)
+        qb.addOrderBy('article.createdAt', sortBy.createdAt);
+    }
+
+    const [nodes, totalCount] = await qb.getManyAndCount();
 
     return { nodes, totalCount };
   }

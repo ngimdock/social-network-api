@@ -14,7 +14,7 @@ export abstract class Node extends BaseEntity {
 
   @Field(() => Date)
   @CreateDateColumn()
-  createdAd: Date;
+  createdAt: Date;
 
   @Field(() => Date)
   @UpdateDateColumn()

@@ -9,8 +9,8 @@ import {
 import { Node } from '../models';
 
 export enum SortDirection {
-  ASC,
-  DESC,
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
 
 registerEnumType(SortDirection, { name: 'sortDirection' });

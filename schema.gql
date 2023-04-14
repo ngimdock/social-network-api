@@ -4,7 +4,7 @@
 
 interface Node {
   id: ID!
-  createdAd: DateTime!
+  createdAt: DateTime!
   updatedAt: DateTime!
 }
 
@@ -15,7 +15,7 @@ scalar DateTime
 
 type Article {
   id: ID!
-  createdAd: DateTime!
+  createdAt: DateTime!
   updatedAt: DateTime!
   title: String!
   description: String!
@@ -39,6 +39,20 @@ type ArticlePagination {
   nodes: [Article!]!
 }
 
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  firstName: String!
+  lastName: String!
+  avatar: String
+}
+
+type UserCreateOutput {
+  user: User!
+}
+
 type Query {
   sayHello: String!
   articlesPaginated(skip: Int!, take: Int!, sortBy: ArticlePaginationSortBy): ArticlePagination!
@@ -58,6 +72,7 @@ type Mutation {
   articleCreate(input: ArticleCreateInput!): ArticleCreateOutput!
   articleUpdate(articleId: ID!, updateInput: ArticleUpdateInput!): ArticleUpdateOutput!
   articleDelete(articleId: ID!): ArticleDeleteOutput!
+  userCreate(input: UserCreateInput!): UserCreateOutput!
 }
 
 input ArticleCreateInput {
@@ -70,4 +85,12 @@ input ArticleUpdateInput {
   title: String!
   description: String!
   image: String!
+}
+
+input UserCreateInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  avatar: String
 }
