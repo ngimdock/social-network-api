@@ -21,6 +21,7 @@ type User {
   firstName: String!
   lastName: String!
   avatar: String
+  articles: Article!
 }
 
 type Article {
@@ -67,6 +68,7 @@ type AuthOutput {
 type Query {
   sayHello: String!
   findMe: UserCreateOutput!
+  findOne(userId: ID!): UserCreateOutput!
   articlesPaginated(skip: Int!, take: Int!, sortBy: ArticlePaginationSortBy): ArticlePagination!
 }
 

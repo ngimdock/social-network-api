@@ -79,6 +79,16 @@ export class ArticleService {
     return { nodes, totalCount };
   }
 
+  async articlesForUser(userId: string) {
+    const articles = await this.articleRepository.find({
+      where: {
+        authorId: userId,
+      },
+    });
+
+    return articles;
+  }
+
   async findOne(id: string): Promise<Article> {
     const foundArticle = await this.articleRepository.findOne(id);
 

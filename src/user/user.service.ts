@@ -33,7 +33,9 @@ export class UserService {
   }
 
   async userGetById(userId: string): Promise<User> {
-    const foundUser = this.userRepository.findOne({ id: userId });
+    const foundUser = await this.userRepository.findOne({
+      where: { id: userId },
+    });
 
     if (!foundUser) throw new UserNotFoudException();
 
