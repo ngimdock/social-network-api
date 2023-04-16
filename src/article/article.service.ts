@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   ArticleCreateInput,
   ArticleCreateOutput,
+  ArticleDeleteOutput,
   ArticlePagination,
   ArticlePaginationArgs,
   ArticleUpdateInput,
@@ -42,12 +43,12 @@ export class ArticleService {
     return { article };
   }
 
-  async deleteArticle(articleId: Article['id']): Promise<ArticleUpdateOutput> {
+  async deleteArticle(articleId: Article['id']): Promise<ArticleDeleteOutput> {
     const articleToDelete = await this.findOne(articleId);
 
     this.articleRepository.remove(articleToDelete);
 
-    return { article: articleToDelete };
+    return { id: articleToDelete.id };
   }
 
   async articlesPaginated(

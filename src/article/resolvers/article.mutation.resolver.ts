@@ -29,7 +29,7 @@ export class ArticleMutationResolver {
   @Mutation(() => ArticleDeleteOutput)
   async articleDelete(
     @Args({ name: 'articleId', type: () => ID }) id: Article['id'],
-  ) {
+  ): Promise<ArticleDeleteOutput> {
     return this.articleService.deleteArticle(id);
   }
 }

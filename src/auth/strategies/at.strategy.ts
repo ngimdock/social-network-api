@@ -24,11 +24,6 @@ export class AtStrategy extends PassportStrategy(Strategy, JWT) {
 
     if (!currentUser || !currentUser.rtHash) throw new UnauthorizedException();
 
-    delete currentUser.hash;
-    delete currentUser.rtHash;
-
-    console.log({ payload });
-
     return payload;
   }
 }
