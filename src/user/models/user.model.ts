@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Article } from 'src/article/models';
 import { Node } from 'src/pagination/models';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -26,4 +27,7 @@ export class User extends Node {
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   avatar?: string;
+
+  @OneToMany(() => Article, (article) => article.author)
+  articles: Article[];
 }

@@ -8,14 +8,19 @@ import {
   ArticleUpdateOutput,
 } from '../dto';
 import { Article } from '../models';
+import { CurrentUser } from 'src/auth/decorators';
+import { JwtPayloadType } from 'src/auth/types';
 
 @Resolver(Article)
 export class ArticleMutationResolver {
   constructor(private readonly articleService: ArticleService) {}
 
   @Mutation(() => ArticleCreateOutput)
-  async articleCreate(@Args('input') input: ArticleCreateInput) {
-    return this.articleService.createArticle(input);
+  async articleCreate(
+    @CurrentUser() currentUser: JwtPayloadType,
+    @Args('input') input: ArticleCreateInput,
+  ) {
+    return this.articleService.createArticle(currentUser, input);
   }
 
   @Mutation(() => ArticleUpdateOutput)

@@ -12,6 +12,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './models';
 import { Repository } from 'typeorm';
 import { ArticleNotFoundException } from './exceptions';
+import { JwtPayloadType } from 'src/auth/types';
+import { User } from 'src/user/models';
 
 @Injectable()
 export class ArticleService {
@@ -20,8 +22,15 @@ export class ArticleService {
     private readonly articleRepository: Repository<Article>,
   ) {}
 
-  async createArticle(input: ArticleCreateInput): Promise<ArticleCreateOutput> {
+  async createArticle(
+    user: JwtPayloadType,
+    input: ArticleCreateInput,
+  ): Promise<ArticleCreateOutput> {
     const createdArticle = this.articleRepository.create(input);
+
+    createdArticle.author = new User();
+
+    createdArticle.author.id = user.sub;
 
     const article = await this.articleRepository.save(createdArticle);
 
