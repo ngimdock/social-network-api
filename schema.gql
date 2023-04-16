@@ -39,8 +39,32 @@ type ArticlePagination {
   nodes: [Article!]!
 }
 
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  firstName: String!
+  lastName: String!
+  avatar: String
+}
+
+type UserCreateOutput {
+  user: User!
+}
+
+type Tokens {
+  access_token: String!
+  refresh_token: String!
+}
+
+type AuthOutput {
+  tokens: Tokens!
+}
+
 type Query {
   sayHello: String!
+  findMe: UserCreateOutput!
   articlesPaginated(skip: Int!, take: Int!, sortBy: ArticlePaginationSortBy): ArticlePagination!
 }
 
@@ -55,9 +79,23 @@ enum sortDirection {
 }
 
 type Mutation {
+  localRegister(input: AuthRegisterInput!): AuthOutput!
+  localLogin(input: AuthLoginInput!): AuthOutput!
   articleCreate(input: ArticleCreateInput!): ArticleCreateOutput!
   articleUpdate(articleId: ID!, updateInput: ArticleUpdateInput!): ArticleUpdateOutput!
   articleDelete(articleId: ID!): ArticleDeleteOutput!
+}
+
+input AuthRegisterInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+}
+
+input AuthLoginInput {
+  email: String!
+  password: String!
 }
 
 input ArticleCreateInput {

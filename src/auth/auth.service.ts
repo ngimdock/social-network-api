@@ -13,6 +13,7 @@ import { UserService } from 'src/user/user.service';
 
 import { UserCreateData } from 'src/user/types';
 import { CredentialsIncorrectException } from 'src/user/exceptions';
+import { AuthOutput } from 'src/common/dto';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,9 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async localRegister(registerInput: AuthRegisterInput): Promise<Tokens> {
+  async localRegister(registerInput: AuthRegisterInput): Promise<AuthOutput> {
+    await this.userService.userGetByEmail(registerInput.email);
+
     const { email, password, firstName, lastName } = registerInput;
 
     const hash = await argon2.hash(password);
@@ -42,10 +45,10 @@ export class AuthService {
 
     await this.userService.userUpdateRtHash(user.id, tokens.refresh_token);
 
-    return tokens;
+    return { tokens };
   }
 
-  async localLogin(loginInput: AuthLoginInput): Promise<Tokens> {
+  async localLogin(loginInput: AuthLoginInput): Promise<AuthOutput> {
     const user = await this.userService.userGetByEmail(loginInput.email);
 
     if (!user) throw new NotFoundException('User not found');
@@ -61,7 +64,7 @@ export class AuthService {
 
     await this.userService.userUpdateRtHash(user.id, tokens.refresh_token);
 
-    return tokens;
+    return { tokens };
   }
 
   async logout(userId: string) {

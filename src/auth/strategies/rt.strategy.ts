@@ -33,8 +33,6 @@ export class RtStrategy extends PassportStrategy(Strategy, JWT_REFRESH) {
     delete currentUser.hash;
     delete currentUser.rtHash;
 
-    console.log({ currentUser });
-
     const userDataWithBearerToken = { ...currentUser, bearerRtToken };
 
     return userDataWithBearerToken;

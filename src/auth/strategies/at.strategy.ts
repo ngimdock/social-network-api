@@ -27,7 +27,6 @@ export class AtStrategy extends PassportStrategy(Strategy, JWT) {
     delete currentUser.hash;
     delete currentUser.rtHash;
 
-    console.log({ currentUser });
     console.log({ payload });
 
     return payload;

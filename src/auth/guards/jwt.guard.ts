@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { JWT } from '../constants';
 import { IS_PUBLIC } from '../decorators';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 
 @Injectable()
 export class JwtGuard extends AuthGuard(JWT) {
@@ -16,16 +17,15 @@ export class JwtGuard extends AuthGuard(JWT) {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const ctx = GqlExecutionContext.create(context);
+    const gqlRequest = ctx.getContext().req;
 
     const isPublicRoute = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC, [
       ctx.getHandler(),
       ctx.getClass(),
     ]);
 
-    console.log({ isPublicRoute });
-
     if (isPublicRoute) return true;
 
-    return super.canActivate(ctx);
+    return super.canActivate(new ExecutionContextHost([gqlRequest]));
   }
 }
