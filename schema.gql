@@ -21,7 +21,7 @@ type User {
   firstName: String!
   lastName: String!
   avatar: String
-  articles: Article!
+  articles: [Article!]!
 }
 
 type Article {

@@ -7,10 +7,10 @@ import { Article } from 'src/article/models';
 export class UserFieldsResolver {
   constructor(private readonly articleService: ArticleService) {}
 
-  @ResolveField(() => Article)
+  @ResolveField(() => [Article])
   async articles(@Parent() user: User) {
-    // if (!user.articles) return null;
+    const userArticles = await this.articleService.articlesForUser(user.id);
 
-    return this.articleService.articlesForUser(user.id);
+    return userArticles;
   }
 }

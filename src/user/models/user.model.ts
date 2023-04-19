@@ -29,5 +29,6 @@ export class User extends Node {
   avatar?: string;
 
   @OneToMany(() => Article, (article) => article.author)
+  @Field(() => [Article])
   articles: Article[];
 }

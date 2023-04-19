@@ -82,7 +82,9 @@ export class ArticleService {
   async articlesForUser(userId: string) {
     const articles = await this.articleRepository.find({
       where: {
-        authorId: userId,
+        author: {
+          id: userId,
+        },
       },
     });
 
